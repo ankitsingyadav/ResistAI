@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ResistAI – Antibiotic Resistance Predictor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="logo" onclick="showPage('landing')">
+    <div class="logo-mark">R</div>
+    <span class="logo-text">ResistAI</span>
+  </div>
+  <div class="nav-links">
+    <button class="nav-btn" id="nb-predict" onclick="showPage('predict')">Predict</button>
+    <button class="nav-btn" id="nb-dash" onclick="showPage('dash')">Dashboard</button>
+    <button class="nav-btn" id="nb-history" onclick="showPage('history')">History</button>
+  </div>
+  <div class="nav-right">
+    <div class="nav-badge"><span class="nav-dot"></span>Model active</div>
+  </div>
+</nav>
+
+<!-- CHATBOT -->
+<div id="chatbot-widget">
+  <button id="chatbot-toggle" onclick="toggleChatbot()" aria-label="Open AI assistant">
+    <span id="chatbot-icon">💬</span>
+  </button>
+  <div id="chatbot-window">
+    <div id="chatbot-header">
+      <div>
+        <div class="chatbot-title">ResistAI Assistant</div>
+        <div class="chatbot-subtitle">AI-powered Q&amp;A</div>
+      </div>
+      <button id="chatbot-close" onclick="toggleChatbot()">×</button>
+    </div>
+    <div id="chatbot-messages">
+      <div class="chatbot-message bot">
+        <div class="message-avatar">🤖</div>
+        <div class="message-content">
+          <div class="message-text">Hello! I'm your ResistAI assistant. Ask me anything about antibiotic resistance prediction, how to use the app, or interpreting results.</div>
+          <div class="message-time">Just now</div>
+        </div>
+      </div>
+    </div>
+    <div id="chatbot-input-area">
+      <div id="chatbot-suggestions">
+        <button class="suggestion-btn" onclick="sendSuggestion('What is antibiotic resistance?')">What is antibiotic resistance?</button>
+        <button class="suggestion-btn" onclick="sendSuggestion('How do I use the predictor?')">How to use the predictor?</button>
+        <button class="suggestion-btn" onclick="sendSuggestion('What do the results mean?')">What do results mean?</button>
+      </div>
+      <div id="chatbot-input-container">
+        <input type="text" id="chatbot-input" placeholder="Ask me anything..." onkeypress="handleChatKeyPress(event)">
+        <button id="chatbot-send" onclick="sendChatMessage()">→</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════ LANDING ════════════════════ -->
+<div id="pg-landing" class="page active">
+  <div class="grid-bg"></div>
+  <div class="hero">
+    <div class="eyebrow"><span class="nav-dot"></span>Antibiotic Resistance · AI Decision Support · Clinical Grade</div>
+    <h1>Stop guessing.<br><em>Predict resistance</em><br>in seconds.</h1>
+    <p>Reduce 48–72h lab delays with AI-powered predictions trained on real clinical data. ResistAI gives clinicians resistance probabilities for 12 antibiotics — instantly.</p>
+    <div class="hero-ctas">
+      <button class="btn-primary" onclick="showPage('predict')">Run a prediction →</button>
+      <button class="btn-secondary" onclick="showPage('dash')">View dashboard</button>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat r fade-in">
+      <span class="stat-icon">⚠️</span>
+      <span class="stat-val">700K+</span>
+      <span class="stat-lbl">Deaths/yr from AMR</span>
+    </div>
+    <div class="stat a fade-in">
+      <span class="stat-icon">⏱️</span>
+      <span class="stat-val">48–72h</span>
+      <span class="stat-lbl">Current lab wait time</span>
+    </div>
+    <div class="stat g fade-in">
+      <span class="stat-icon">⚡</span>
+      <span class="stat-val">&lt;2s</span>
+      <span class="stat-lbl">ResistAI prediction time</span>
+    </div>
+    <div class="stat b fade-in">
+      <span class="stat-icon">🎯</span>
+      <span class="stat-val">80%+</span>
+      <span class="stat-lbl">Model AUC accuracy</span>
+    </div>
+  </div>
+
+  <div class="feature-grid">
+    <div class="feat fade-in">
+      <div class="feat-icon">◆</div>
+      <h3>Species-aware prediction</h3>
+      <p>Input bacterial species and get resistance probabilities tailored to that organism's known clinical patterns.</p>
+    </div>
+    <div class="feat fade-in">
+      <div class="feat-icon">◈</div>
+      <h3>Explainable AI (SHAP)</h3>
+      <p>Every prediction includes SHAP-based feature importance — you see exactly which factors drove the result.</p>
+    </div>
+    <div class="feat fade-in">
+      <div class="feat-icon">◉</div>
+      <h3>12-antibiotic ranking</h3>
+      <p>Get a ranked list of antibiotics from most effective to most resistant with confidence scores for each.</p>
+    </div>
+    <div class="feat fade-in">
+      <div class="feat-icon">↑</div>
+      <h3>Prediction history</h3>
+      <p>Every prediction is logged with full metadata. Track resistance trends and review past cases at any time.</p>
+    </div>
+  </div>
+
+  <!-- Live demo terminal -->
+  <div class="terminal">
+    <div class="term-bar">
+      <span class="td" style="background:#f04444"></span>
+      <span class="td" style="background:#f5a623"></span>
+      <span class="td" style="background:#22d47a"></span>
+      <span class="term-title">resistai — example prediction output</span>
+    </div>
+    <div class="term-body">
+      <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd"> predict --species "E. coli" --ward "ICU" --prior "Ampicillin"</span></div>
+      <div class="t-line t-dim" style="margin-top:8px">Analyzing resistance patterns... done in 0.8s</div>
+      <div class="t-results">
+        <div class="t-result"><span class="t-drug">Meropenem</span><div class="t-bar-track"><div class="t-bar-fill" style="width:8%;background:var(--green);opacity:.8"></div></div><span class="t-pct" style="color:var(--green)">8%</span><span class="t-status" style="color:var(--green)">[EFFECTIVE]</span></div>
+        <div class="t-result"><span class="t-drug">Gentamicin</span><div class="t-bar-track"><div class="t-bar-fill" style="width:42%;background:var(--amber);opacity:.8"></div></div><span class="t-pct" style="color:var(--amber)">42%</span><span class="t-status" style="color:var(--amber)">[UNCERTAIN]</span></div>
+        <div class="t-result"><span class="t-drug">Ciprofloxacin</span><div class="t-bar-track"><div class="t-bar-fill" style="width:65%;background:var(--red);opacity:.8"></div></div><span class="t-pct" style="color:var(--red)">65%</span><span class="t-status" style="color:var(--red)">[RESISTANT]</span></div>
+        <div class="t-result"><span class="t-drug">Ampicillin</span><div class="t-bar-track"><div class="t-bar-fill" style="width:88%;background:var(--red);opacity:.8"></div></div><span class="t-pct" style="color:var(--red)">88%</span><span class="t-status" style="color:var(--red)">[RESISTANT]</span></div>
+      </div>
+      <div class="t-line" style="margin-top:10px;color:var(--text3)">Model: RandomForest · Confidence: 87% · SHAP explanations available</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════ PREDICTOR ════════════════════ -->
+<div id="pg-predict" class="page">
+  <div class="page-inner">
+    <div class="predict-header">
+      <h1>Resistance predictor</h1>
+      <p>Enter patient and isolate data to get antibiotic resistance predictions with AI explanations</p>
+    </div>
+    <div class="predict-layout">
+
+      <!-- FORM -->
+      <div class="form-panel">
+        <div class="form-section">
+          <div class="sec-hdr"><span class="sec-num">01</span><span class="sec-title">Bacterial isolate</span></div>
+          <div class="field">
+            <label class="lbl">Species <span style="color:var(--accent)">*</span></label>
+            <select class="sel" id="sel-species">
+              <option value="">Select species...</option>
+              <option value="Escherichia coli">Escherichia coli</option>
+              <option value="Staphylococcus aureus">Staphylococcus aureus</option>
+              <option value="Klebsiella pneumoniae">Klebsiella pneumoniae</option>
+              <option value="Pseudomonas aeruginosa">Pseudomonas aeruginosa</option>
+              <option value="Acinetobacter baumannii">Acinetobacter baumannii</option>
+              <option value="Enterococcus faecalis">Enterococcus faecalis</option>
+            </select>
+          </div>
+          <div class="two-col">
+            <div class="field">
+              <label class="lbl">Ward</label>
+              <select class="sel" id="sel-ward">
+                <option value="">Select...</option>
+                <option value="ICU">ICU</option>
+                <option value="General ward">General ward</option>
+                <option value="Emergency dept">Emergency dept</option>
+                <option value="Surgical ward">Surgical ward</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="lbl">Patient age</label>
+              <input class="inp" type="number" placeholder="Years" id="inp-age" min="0" max="120">
+            </div>
+          </div>
+          <div class="two-col">
+            <div class="field">
+              <label class="lbl">Infection source</label>
+              <select class="sel" id="sel-source">
+                <option value="">Select...</option>
+                <option value="Blood">Blood (Bacteremia)</option>
+                <option value="Urine">Urine (UTI)</option>
+                <option value="Respiratory">Respiratory (Pneumonia)</option>
+                <option value="CSF">CSF (Meningitis)</option>
+                <option value="Wound">Wound (Surgical)</option>
+                <option value="Intra-abdominal">Intra-abdominal</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="lbl">Hospital stay</label>
+              <select class="sel" id="sel-stay">
+                <option value="">Select...</option>
+                <option value="short">&lt;3 days</option>
+                <option value="medium">3–5 days</option>
+                <option value="long">&gt;5 days (↑ risk)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <!-- New: clinical risk factors -->
+        <div class="form-section">
+          <div class="sec-hdr"><span class="sec-num">02</span><span class="sec-title">Clinical risk factors</span></div>
+          <div class="two-col">
+            <div class="field">
+              <label class="lbl">Device usage</label>
+              <select class="sel" id="sel-device">
+                <option value="">None</option>
+                <option value="catheter">Urinary catheter</option>
+                <option value="ventilator">Mechanical ventilator</option>
+                <option value="central_line">Central line</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="lbl">Prior hospitalization</label>
+              <select class="sel" id="sel-hosp">
+                <option value="">No</option>
+                <option value="recent">Yes, &lt;3 months</option>
+                <option value="distant">Yes, &gt;3 months</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label class="lbl">Target antibiotic to evaluate</label>
+            <select class="sel" id="sel-target">
+              <option value="">All antibiotics (recommended)</option>
+              <option value="Ampicillin">Ampicillin</option>
+              <option value="Amoxicillin">Amoxicillin</option>
+              <option value="Ciprofloxacin">Ciprofloxacin</option>
+              <option value="Gentamicin">Gentamicin</option>
+              <option value="Meropenem">Meropenem</option>
+              <option value="Vancomycin">Vancomycin</option>
+              <option value="Ceftriaxone">Ceftriaxone</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <div class="form-section">
+          <div class="sec-hdr"><span class="sec-num">03</span><span class="sec-title">Prior antibiotic exposure</span></div>
+          <div class="hint">Select all recently administered antibiotics</div>
+          <div class="pill-grid" id="pill-grid"></div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn-reset" id="btn-reset" style="display:none" onclick="resetPredict()">↺ New prediction</button>
+          <button class="btn-submit" id="btn-submit" onclick="runPrediction()">Predict resistance →</button>
+        </div>
+      </div>
+
+      <!-- RESULTS -->
+      <div id="results-area">
+        <div class="empty-state">
+          <div class="empty-icon">◉</div>
+          <div class="empty-title">Results will appear here</div>
+          <div class="empty-sub">Fill in the form and click "Predict resistance" to get resistance probabilities with AI explanations and recommended antibiotics.</div>
+          <div class="empty-example">
+            <div class="ex-label">Example prediction:</div>
+            <div class="ex-item"><span style="color:var(--green)">●</span> Meropenem → LOW resistance (8%)</div>
+            <div class="ex-item"><span style="color:var(--amber)">●</span> Gentamicin → UNCERTAIN (42%)</div>
+            <div class="ex-item"><span style="color:var(--red)">●</span> Ampicillin → HIGH resistance (88%)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════ DASHBOARD ════════════════════ -->
+<div id="pg-dash" class="page">
+  <div class="page-inner">
+    <div class="dash-header">
+      <div>
+        <h1>Resistance dashboard</h1>
+        <p style="font-size:13px;color:var(--text2)">Aggregated resistance patterns from prediction history</p>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <span class="meta-badge">Updated: just now</span>
+        <button class="btn-refresh" onclick="updateDashboard()">↻ Refresh</button>
+      </div>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi b"><span class="kpi-val" id="kpi-total">1,182</span><span class="kpi-lbl">Total predictions</span><span class="kpi-sub">All time</span></div>
+      <div class="kpi r"><span class="kpi-val" id="kpi-highres">38%</span><span class="kpi-lbl">High resistance cases</span><span class="kpi-sub">↑ vs last month</span></div>
+      <div class="kpi g"><span class="kpi-val" id="kpi-accuracy">83.4%</span><span class="kpi-lbl">Model accuracy</span><span class="kpi-sub">AUC on test set</span></div>
+      <div class="kpi a"><span class="kpi-val" id="kpi-time">1.4s</span><span class="kpi-lbl">Avg prediction time</span><span class="kpi-sub">p95: 2.1s</span></div>
+    </div>
+
+    <div class="dash-grid">
+      <div class="card fade-in">
+        <div class="card-hdr"><span class="card-title">Resistance rates by antibiotic</span><span class="card-meta">% resistant</span></div>
+        <div class="heat-list" id="heat-list"></div>
+        <div class="heat-legend">
+          <span class="hl-item"><span class="hl-dot" style="background:var(--red)"></span>Resistant ≥65%</span>
+          <span class="hl-item"><span class="hl-dot" style="background:var(--amber)"></span>Uncertain 40–65%</span>
+          <span class="hl-item"><span class="hl-dot" style="background:var(--green)"></span>Effective &lt;40%</span>
+        </div>
+      </div>
+      <div class="card fade-in">
+        <div class="card-hdr"><span class="card-title">Top organisms</span><span class="card-meta">By volume</span></div>
+        <div class="species-list" id="species-list"></div>
+        <canvas id="species-chart" style="margin-top:16px;max-height:160px"></canvas>
+      </div>
+    </div>
+
+    <!-- Trend chart -->
+    <div class="card fade-in" style="margin-top:16px">
+      <div class="card-hdr"><span class="card-title">Resistance trends over time</span><span class="card-meta">Last 7 days</span></div>
+      <canvas id="trend-chart" style="max-height:200px;padding:8px"></canvas>
+    </div>
+
+    <div class="card fade-in" style="margin-top:16px">
+      <div class="card-hdr"><span class="card-title">Recent predictions</span><span class="card-meta">Latest 5 entries</span></div>
+      <div class="tbl-head"><span>ID</span><span>Species</span><span>Ward</span><span>Antibiotic</span><span>Result</span><span>Time</span></div>
+      <div id="tbl-body"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════ HISTORY ════════════════════ -->
+<div id="pg-history" class="page">
+  <div class="page-inner">
+    <div class="dash-header">
+      <div>
+        <h1>Prediction history</h1>
+        <p style="font-size:13px;color:var(--text2)">Complete log of all resistance predictions</p>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <span class="meta-badge" id="history-count">Loading...</span>
+        <span class="meta-badge">Real-time updates</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-hdr">
+        <span class="card-title">All predictions</span>
+        <span class="card-meta" id="history-meta">Loading...</span>
+      </div>
+      <div class="tbl-head tbl-head-history">
+        <span>ID</span><span>Species</span><span>Ward</span><span>Source</span><span>Best antibiotic</span><span>Results</span><span>Timestamp</span><span>Duration</span>
+      </div>
+      <div id="history-body">
+        <div class="loading-placeholder">
+          <div class="loading-ring"></div>
+          <div>Loading prediction history...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
