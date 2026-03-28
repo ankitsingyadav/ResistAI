@@ -161,7 +161,7 @@ The model is trained on structured clinical-like data including:
 ![Dashboard](https://github.com/ankitsingyadav/ResistAI/blob/main/screenshots/dashboard.png?raw=true)
 
 ### 📸 Dataset Preview
-![Dataset](https://github.com/ankitsingyadav/ResistAI/blob/main/Screenshot%202026-03-29%20040922.png?raw=true)
+![Dataset](https://github.com/ankitsingyadav/ResistAI/blob/main/screenshots/dataset.png?raw=true)
 ---
 
 ## ⚠️ Disclaimer
