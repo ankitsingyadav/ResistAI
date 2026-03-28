@@ -1,84 +1,180 @@
-# ResistAI – Antibiotic Resistance Predictor
+# 🚀 ResistAI – Predict Antibiotic Resistance in Seconds
 
-AI-powered clinical decision support tool for predicting antibiotic resistance patterns.
-
----
-
-## 🚀 Quick Start
-
-### 1. Set up Python virtual environment
-
-```bash
-# In your project folder
-python -m venv .venv
-
-# Activate (Windows)
-.venv\Scripts\activate
-
-# Activate (Mac/Linux)
-source .venv/bin/activate
-```
-
-### 2. Install dependencies
-
-```bash
-pip install flask flask-cors scikit-learn joblib numpy pandas
-```
-
-### 3. Make sure these files are in the same folder
-
-```
-resistai/
-├── app.py
-├── index.html
-├── styles.css
-├── script.js
-├── resistance_model.pkl
-├── train_model.py
-├── dataset2.csv
-└── README.md
-```
-
-### 4. Run the app
-
-```bash
-python app.py
-```
-
-Then open: **http://127.0.0.1:5000**
+> Stop guessing. Start predicting.
 
 ---
 
-## 🔧 Retrain the model
+## 🧠 Overview
 
-If you want to retrain with updated data:
+**ResistAI** is an AI-powered clinical decision support system that predicts **antibiotic resistance** in real-time using machine learning.
 
-```bash
-python train_model.py
+Antimicrobial resistance (AMR) is a global health crisis, causing treatment delays and increasing mortality due to slow lab results.
+
+ResistAI bridges this gap by providing **instant predictions (<2s)** based on patient, bacterial, and clinical data.
+
+---
+
+## ⚡ Key Features
+
+* 🧬 **Species-aware prediction** (E. coli, S. aureus, etc.)
+* 💊 **Target antibiotic resistance prediction**
+* 📊 **Probability-based output (risk scoring)**
+* 🧠 **Explainable AI (XAI)** – shows why prediction was made
+* 📈 **Antibiotic ranking system** (best → worst)
+* 🏥 **Clinical context inputs**:
+
+  * Patient age
+  * Hospital ward (ICU / OPD)
+  * Infection source
+  * Prior antibiotic exposure
+* ⚡ **Real-time prediction (<2 seconds)**
+
+---
+
+## 🎯 Problem Statement
+
+* ⏳ Traditional lab testing takes **48–72 hours**
+* ❌ Wrong antibiotic choice → treatment failure
+* ⚠️ Rising global AMR threat
+
+👉 **Solution:** AI-driven early prediction to assist doctors in decision-making
+
+---
+
+## 🧠 How It Works
+
+```mermaid
+graph TD
+A[User Input] --> B[Feature Processing]
+B --> C[ML Model]
+C --> D[Prediction Output]
+D --> E[Explainability + Ranking]
 ```
 
-This generates a new `resistance_model.pkl`.
+---
+
+## 📊 Example Output
+
+```text
+Bacteria: E. coli
+Antibiotic: Ciprofloxacin
+
+Resistance: HIGH 🔴
+Probability: 82%
+
+Reason:
+- Prior antibiotic exposure
+- ICU admission
+- Urinary infection
+```
 
 ---
 
-## ✨ Features
+## 🏗️ Tech Stack
 
-| Feature | Status |
-|---|---|
-| 12-antibiotic resistance prediction | ✅ |
-| Species-aware profiles | ✅ |
-| Clinical risk factor modifiers (ICU, stay duration, device, prior hospitalization) | ✅ |
-| Animated loading with step-by-step feedback | ✅ |
-| Result card with ranked antibiotic list | ✅ |
-| Best antibiotic recommendation | ✅ |
-| SHAP feature importance explanations | ✅ |
-| Resistance dashboard with Chart.js trends | ✅ |
-| Prediction history log | ✅ |
-| AI chatbot assistant | ✅ |
-| Simulation fallback if backend unavailable | ✅ |
+### 🔹 Frontend
+
+* React.js / Next.js
+* Tailwind CSS
+* Framer Motion
+
+### 🔹 Backend
+
+* FastAPI (Python)
+
+### 🔹 Machine Learning
+
+* Scikit-learn
+* Random Forest / Logistic Regression
+* SHAP (Explainability)
 
 ---
 
-## 🏥 Disclaimer
+## 📂 Project Structure
 
-ResistAI is a **decision-support tool only**. Always confirm predictions with laboratory culture and sensitivity testing, and consult infectious disease specialists before prescribing.
+```bash
+ResistAI/
+│
+├── backend/                     # FastAPI backend
+│   ├── app.py                  # Main API file
+│   ├── train_model.py          # Model training script
+│   ├── test_predict.py         # Model testing script
+│   ├── resistance_model.pkl    # Trained ML model
+│   ├── dataset1.csv            # Training dataset
+│   ├── dataset2.csv            # Additional dataset
+│   └── __pycache__/            # Python cache files
+│
+├── frontend/                   # Frontend UI
+│   ├── index.html              # Main UI page
+│   ├── styles.css              # Styling
+│   ├── script.js               # Frontend logic
+│   └── package-lock.json       # Dependencies lock file
+│
+├── .venv/                      # Virtual environment (ignored)
+├── LICENSE                     # License file
+├── README.md                   # Project documentation
+```
+
+
+---
+
+## 🧪 Model Details
+
+The model is trained on clinical-like features such as:
+
+* Bacterial species
+* Patient demographics
+* Infection type
+* Antibiotic exposure history
+
+---
+
+## 📸 Screenshots
+
+### 🏠 Landing Page
+![Landing Page](./resistai/landingpage.png)
+
+### 📊 Dashboard
+![Dashboard](./resistai/dashboard.png)
+---
+
+## ⚠️ Disclaimer
+
+This project is for **educational and research purposes only**
+Not intended for real clinical use
+
+---
+
+## 💡 Future Improvements
+
+* 🔬 Real hospital dataset integration
+* 📱 Mobile app version
+* 🤖 Deep learning models
+* 🧠 LLM-based assistant
+* 🔗 EHR integration
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome!
+Feel free to fork and submit pull requests.
+
+---
+
+## 👨‍💻 Author
+
+**Ankit singh Yadav**
+**Github-ankitsingyadav**
+
+---
+
+## ⭐ Show Your Support
+
+If you like this project:
+
+👉 Star ⭐ the repo
+👉 Share it
+👉 Use it in your portfolio
+
+---
