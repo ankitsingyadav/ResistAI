@@ -129,6 +129,29 @@ The model is trained on clinical-like features such as:
 
 ---
 
+## 📊 Dataset
+
+The model is trained on structured clinical-like data including:
+
+* Bacterial species
+* Patient age
+* Hospital ward
+* Infection source
+* Prior antibiotic exposure
+* Target antibiotic
+* Resistance outcome (0 = Sensitive, 1 = Resistant)
+
+### 🔍 Sample Data
+
+| Species       | Age | Ward | Infection | Antibiotic    | Resistant |
+| ------------- | --- | ---- | --------- | ------------- | --------- |
+| E. coli       | 45  | ICU  | Urine     | Ciprofloxacin | 1         |
+| S. aureus     | 30  | OPD  | Skin      | Vancomycin    | 0         |
+| K. pneumoniae | 60  | ICU  | Blood     | Meropenem     | 1         |
+
+> Dataset used for training is available in the repository (`dataset1.csv`, `dataset2.csv`)
+
+
 ## 📸 Screenshots
 
 ### 🏠 Home Page
@@ -136,6 +159,9 @@ The model is trained on clinical-like features such as:
 
 ### 📊 Dashboard
 ![Dashboard](https://github.com/ankitsingyadav/ResistAI/blob/main/screenshots/dashboard.png?raw=true)
+
+### 📸 Dataset Preview
+![Dataset](screenshots/dataset.png)
 ---
 
 ## ⚠️ Disclaimer
