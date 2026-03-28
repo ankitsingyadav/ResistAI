@@ -163,7 +163,7 @@ function runPrediction() {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 8000);
 
-  fetch('/predict', {
+  fetch('https://resistai.onrender.com', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
