@@ -135,7 +135,7 @@ The model is trained on clinical-like features such as:
 ![Landing Page](https://github.com/ankitsingyadav/ResistAI/blob/main/Screenshot%202026-03-29%20025624.png?raw=true)
 
 ### 📊 Dashboard
-![Dashboard](./resistai/dashboard.png)
+![Dashboard](https://github.com/ankitsingyadav/ResistAI/blob/main/Screenshot%202026-03-29%20033924.png?raw=true)
 ---
 
 ## ⚠️ Disclaimer
