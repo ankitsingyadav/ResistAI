@@ -148,7 +148,7 @@ function runPrediction() {
     if (stepIdx >= steps.length) { clearInterval(stepInterval); }
     const subEl = document.getElementById('loading-sub-text');
     if (subEl && steps[stepIdx]) subEl.textContent = steps[stepIdx];
-  }, 180);
+  }, 240);
 
   const ward = document.getElementById('sel-ward').value;
   const source = document.getElementById('sel-source').value;
