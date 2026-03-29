@@ -31,15 +31,20 @@ ResistAI bridges this gap by providing **instant predictions (<2s)** based on pa
 
 ---
 
-## 🎯 Problem Statement
+## 🌍 The Problem
 
-* ⏳ Traditional lab testing takes **48–72 hours**
-* ❌ Wrong antibiotic choice → treatment failure
-* ⚠️ Rising global AMR threat
+Antimicrobial Resistance (AMR) is one of the biggest global health threats:
 
-👉 **Solution:** AI-driven early prediction to assist doctors in decision-making
+⏳ Lab testing takes 48–72 hours
+
+❌ Wrong antibiotics → treatment failure
+
+⚠️ Rising drug-resistant infections worldwide
+
+👉 Doctors often make critical decisions without real-time insights
 
 ---
+
 
 ## 🧠 How It Works
 
@@ -110,7 +115,7 @@ ResistAI/
 │   ├── script.js               # Frontend logic
 │   └── package-lock.json       # Dependencies lock file
 │
-├── .venv/                      # Virtual environment (ignored)
+├── .venv/                      # Virtual environment 
 ├── LICENSE                     # License file
 ├── README.md                   # Project documentation
 ```
@@ -162,6 +167,15 @@ The model is trained on structured clinical-like data including:
 
 ### 📸 Dataset Preview
 ![Dataset](https://github.com/ankitsingyadav/ResistAI/blob/main/screenshots/dataset.png?raw=true)
+
+---
+
+## 🌐 Live Demo
+
+🚀 Frontend (Vercel): https://resistai.vercel.app/  
+
+⚙️ Backend (Render): https://resistai.onrender.com/
+
 ---
 
 ## ⚠️ Disclaimer
@@ -190,8 +204,9 @@ Feel free to fork and submit pull requests.
 
 ## 👨‍💻 Author
 
-**Ankit singh Yadav**
-**Github-ankitsingyadav**
+**Ankit singh Yadav**  
+
+**Github-https://github.com/ankitsingyadav**
 
 ---
 
@@ -201,6 +216,5 @@ If you like this project:
 
 👉 Star ⭐ the repo
 👉 Share it
-👉 Use it in your portfolio
 
 ---
