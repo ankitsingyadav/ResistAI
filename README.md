@@ -174,7 +174,8 @@ The model is trained on structured clinical-like data including:
 
 🚀 Frontend (Vercel): https://resistai.vercel.app/  
 
-⚙️ Backend (Render): https://resistai.onrender.com/
+⚙️ Backend (Render): https://resistai.onrender.com/  
+**⚠ Note: Backend is hosted on free tier (Render), may take a few seconds to wake up.**
 
 ---
 
