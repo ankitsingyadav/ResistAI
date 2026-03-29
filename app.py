@@ -143,6 +143,12 @@ def chat():
                     'Ask about resistance, usage, or model.')
     return jsonify({'response': response})
 
+# ─── Health Check (ADD THIS BELOW) ───────────────────────────────────────────────
+
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({"status": "ok"})
+
 # ─── Helpers ────────────────────────────────────────────────────
 def _species_counts():
     counts = {}
