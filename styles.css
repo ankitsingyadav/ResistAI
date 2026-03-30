@@ -73,7 +73,10 @@ button{position:relative;overflow:hidden}
 .feat-icon{font-size:20px;margin-bottom:10px;color:var(--accent)}
 .feat h3{font-size:13px;font-weight:700;margin-bottom:6px;font-family:var(--font-display)}
 .feat p{font-size:12px;color:var(--text2);line-height:1.65}
-.terminal{position:relative;z-index:1;max-width:720px;margin:0 auto 50px;padding:0 24px}
+.terminal{position:relative;z-index:1;max-width:720px;margin:0 auto 24px;padding:0 24px}
+.landing-note{position:relative;z-index:1;max-width:720px;margin:0 auto 52px;padding:14px 18px;display:flex;align-items:center;gap:12px;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.18);border-radius:var(--radius-lg);box-shadow:0 12px 30px rgba(0,212,255,.08)}
+.landing-note-icon{font-size:18px;flex-shrink:0;color:var(--accent)}
+.landing-note-text{font-size:12px;color:var(--text2);line-height:1.7}
 .term-bar{display:flex;align-items:center;gap:5px;background:var(--bg3);border:1px solid var(--border);border-bottom:none;border-radius:var(--radius) var(--radius) 0 0;padding:10px 14px}
 .td{width:10px;height:10px;border-radius:50%}
 .term-title{font-size:10px;color:var(--text3);margin-left:8px;font-family:var(--font-mono)}
@@ -93,6 +96,8 @@ button{position:relative;overflow:hidden}
 .predict-header h1{font-size:22px;font-weight:800;letter-spacing:-.03em;margin-bottom:4px;font-family:var(--font-display)}
 .predict-header p{font-size:13px;color:var(--text2)}
 .predict-layout{display:grid;grid-template-columns:420px 1fr;gap:18px;align-items:start}
+.results-panel{display:flex;flex-direction:column;gap:16px;min-width:0}
+.gene-network-card{margin-top:0}
 .form-panel{background:rgba(255,255,255,.03);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius-lg);overflow:hidden}
 .form-section{padding:18px 20px 14px}
 .sec-hdr{display:flex;align-items:center;gap:9px;margin-bottom:14px}
@@ -300,6 +305,12 @@ button{position:relative;overflow:hidden}
 #chatbot-input:focus{border-color:var(--accent2)}
 #chatbot-send{background:var(--accent);color:#000;border:none;width:32px;border-radius:var(--radius-sm);font-weight:700;font-size:14px;transition:.15s;flex-shrink:0}
 #chatbot-send:hover{background:var(--accent2);transform:scale(1.05)}
+
+#gene-network {
+  height: 280px;
+  border-radius: 12px;
+  background: #0b0f14;
+}
 
 /* RESPONSIVE */
 @media(max-width:960px){.predict-layout{grid-template-columns:1fr}.compare-layout{grid-template-columns:1fr}.feature-grid{grid-template-columns:1fr 1fr}.stats-row{grid-template-columns:repeat(2,1fr)}.kpi-row{grid-template-columns:repeat(2,1fr)}.dash-grid{grid-template-columns:1fr}.result-summary{grid-template-columns:1fr 1fr}.compare-results-grid{grid-template-columns:1fr}}

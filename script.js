@@ -234,6 +234,12 @@ function renderResults(res,species,ward,recordId){
     </div>
   </div>
 </div>`;
+
+  // 🔥 Render Gene Network
+  setTimeout(() => {
+    renderGeneNetwork(res.results, species);
+  }, 200);
+
   setTimeout(()=>{
     document.querySelectorAll('.drug-fill').forEach((el,i)=>{setTimeout(()=>{el.style.width=el.dataset.target+'%';},i*50);});
     document.querySelectorAll('.shap-bar-fill').forEach((el,i)=>{setTimeout(()=>{el.style.width=el.dataset.target;},i*75);});
@@ -255,6 +261,8 @@ function resetPredict(){
   document.getElementById('inp-age').value='';
   document.getElementById('inp-patient-id').value='';
   document.getElementById('results-area').innerHTML=`<div class="empty-state"><div class="empty-icon">◉</div><div class="empty-title">Results will appear here</div><div class="empty-sub">Fill in the form and click "Predict resistance".</div><div class="empty-example"><div class="ex-label">Example output:</div><div class="ex-item"><span style="color:var(--green)">●</span> Meropenem → 8% · ₹ Low cost</div><div class="ex-item"><span style="color:var(--red)">●</span> Ampicillin → 88% resistant</div></div></div>`;
+  const geneContainer=document.getElementById('gene-network');
+  if(geneContainer)geneContainer.innerHTML='';
   document.getElementById('btn-reset').style.display='none';
 }
 
@@ -576,3 +584,122 @@ function selectPatient(pid) {
 
 // Auto-refresh timeline page when it becomes active
 const _baseShowPage = typeof showPage === 'function' ? showPage : null;
+
+/// ─── Gene Network Visualization ─────────────────────────────
+let network = null;
+
+function renderGeneNetwork(results, species) {
+  const container = document.getElementById("gene-network");
+  if (!container || typeof vis === 'undefined') return;
+
+  container.innerHTML = "";
+  if (network) {
+    network.destroy();
+    network = null;
+  }
+
+  const nodes = [];
+  const edges = [];
+
+  const centerX = 0;
+  const centerY = 0;
+  const radius = 180;
+
+  // 🧬 Center node (species)
+  nodes.push({
+    id: "species",
+    label: species,
+    color: "#00d4ff",
+    shape: "ellipse",
+    size: 30,
+    x: centerX,
+    y: centerY,
+    fixed: true
+  });
+
+  const topDrugs = results.slice(0, 5);
+  const bestDrug = results[0].drug;
+
+  // 💊 Radial drug nodes
+  topDrugs.forEach((r, i) => {
+    const drugId = "drug_" + i;
+
+    const angle = (i / topDrugs.length) * 2 * Math.PI;
+    const x = centerX + radius * Math.cos(angle);
+    const y = centerY + radius * Math.sin(angle);
+
+    let color = "#20d47a";
+    if (r.status === "RESISTANT") color = "#f04444";
+    else if (r.status === "UNCERTAIN") color = "#f5a623";
+
+    const isBest = r.drug === bestDrug;
+
+    nodes.push({
+      id: drugId,
+      label: isBest ? "⭐ " + r.drug : r.drug,
+      color: {
+        background: color,
+        border: isBest ? "#ffffff" : color
+      },
+      borderWidth: isBest ? 4 : 2,
+      size: isBest ? 28 : 20,
+      shape: "box",
+      x: x,
+      y: y,
+      fixed: true,
+      title: `${r.drug} → ${r.status} (${r.pct}%)`
+    });
+
+    edges.push({
+      from: "species",
+      to: drugId,
+      label: r.status,
+      arrows: "to",
+      smooth: false
+    });
+  });
+
+  const data = {
+    nodes: new vis.DataSet(nodes),
+    edges: new vis.DataSet(edges)
+  };
+
+  const options = {
+    physics: {
+      enabled: false
+    },
+
+    edges: {
+      arrows: "to",
+      smooth: false,
+      color: {
+        color: "#00d4ff",
+        opacity: 0.6
+      },
+      font: {
+        size: 11,
+        align: "horizontal"
+      }
+    },
+
+    interaction: {
+      dragNodes: false,
+      zoomView: true,
+      dragView: true,
+      zoomSpeed: 0.2,
+      minZoom: 0.7,
+      maxZoom: 1.3,
+      hover: true
+    }
+  };
+
+  network = new vis.Network(container, data, options);
+
+  // 🔥 smooth center animation
+  network.fit({
+    animation: {
+      duration: 800,
+      easingFunction: "easeInOutQuad"
+    }
+  });
+}
