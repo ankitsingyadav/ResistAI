@@ -39,9 +39,36 @@ Antimicrobial Resistance (AMR) is one of the biggest global health threats:
 
 ❌ Wrong antibiotics → treatment failure
 
-⚠️ Rising drug-resistant infections worldwide
+🚫 No instant prediction tools available
 
-👉 Doctors often make critical decisions without real-time insights
+---
+
+## 💡 Our Solution
+
+🚀 ResistAI provides:  
+
+
+⚡ Instant predictions (<2 seconds)  
+
+🧬 Species-aware analysis  
+
+📊 Risk-based scoring  
+
+
+---
+
+## 🏆 Why ResistAI Stands Out  
+
+⚡ Ultra-fast prediction engine  
+
+🧠 Real ML model (not dummy logic)  
+
+🌍 Solves real healthcare problem  
+
+📊 Smart probability scoring  
+
+🎯 Built for real-world use  
+
 
 ---
 
