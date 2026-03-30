@@ -1,4 +1,4 @@
-/* ResistAI · Complete Winning script.js */
+/* ResistAI · Complete script.js */
 
 const DRUGS=['Ampicillin','Amoxicillin','Ciprofloxacin','Levofloxacin','Gentamicin','Tobramycin','Meropenem','Imipenem','Ceftriaxone','Vancomycin','Tetracycline','Colistin'];
 
@@ -21,6 +21,13 @@ const priorB=new Set();
 const predictionsHistory=[];
 const patientTimelines={};
 const labFeedback=[];
+const CHATBOT_SUGGESTIONS=[
+  'Why is AMR dangerous?',
+  'how to use?',
+  'What do the results mean?',
+  'How does ResistAI work?',
+  'What data is required for prediction?'
+];
 let trendChart=null;
 let lastResult=null;
 let lastInputs=null;
@@ -453,16 +460,54 @@ function loadHistory(){
 }
 
 // ─── Chatbot ──────────────────────────────────────────────────────────────────
-function toggleChatbot(){const w=document.getElementById('chatbot-window');w.style.display=w.style.display==='flex'?'none':'flex';}
+function renderChatSuggestions(){
+  const suggestions=document.getElementById('chatbot-suggestions');
+  if(!suggestions)return;
+  suggestions.innerHTML=CHATBOT_SUGGESTIONS.map(q=>`<button class="suggestion-btn" onclick="sendSuggestion('${q}')">${q}</button>`).join('');
+  suggestions.style.display='flex';
+}
+function toggleChatbot(){
+  const w=document.getElementById('chatbot-window');
+  const nextDisplay=w.style.display==='flex'?'none':'flex';
+  w.style.display=nextDisplay;
+  if(nextDisplay==='flex')renderChatSuggestions();
+}
 function handleChatKeyPress(e){if(e.key==='Enter')sendChatMessage();}
-function sendSuggestion(t){document.getElementById('chatbot-input').value=t;sendChatMessage();document.getElementById('chatbot-suggestions').style.display='none';}
+function sendSuggestion(t){
+  const suggestions=document.getElementById('chatbot-suggestions');
+  renderChatSuggestions();
+  if(suggestions)suggestions.style.display='flex';
+  document.getElementById('chatbot-input').value=t;
+  sendChatMessage();
+}
 function sendChatMessage(){
-  const input=document.getElementById('chatbot-input');const text=input.value.trim();if(!text)return;
+  const input=document.getElementById('chatbot-input');
+  const suggestions=document.getElementById('chatbot-suggestions');
+  const text=input.value.trim();
+  if(!text)return;
+  if(suggestions)suggestions.style.display='flex';
   const messages=document.getElementById('chatbot-messages');
   messages.innerHTML+=`<div class="chatbot-message user"><div class="message-content"><div class="message-text">${text}</div><div class="message-time">just now</div></div></div>`;
   input.value='';messages.scrollTop=messages.scrollHeight;
   const lower=text.toLowerCase();
-  const kb={'antibiotic resistance':'Antibiotic resistance (AMR) occurs when bacteria evolve to defeat the drugs designed to kill them. This happens through genetic mutations, often accelerated by antibiotic misuse. AMR kills 700,000 people/year and could reach 10 million by 2050. ResistAI helps predict which antibiotics will still work.','how do i use':'To use ResistAI:\n1. Select bacterial species\n2. Enter ward, infection source, stay duration\n3. Add clinical risk factors (device, prior hosp.)\n4. Select prior antibiotics used\n5. Click "Predict resistance"\nYou get a ranked antibiotic list with cost context, AI explanation, and PDF export.','results mean':'Results show resistance probability:\n🟢 <40% → Likely effective\n🟡 40–65% → Uncertain (lab confirmation needed)\n🔴 >65% → Likely resistant\n\nThe AI Explanation tab gives a plain-English summary. Cost context (₹/₹₹/₹₹₹) helps with treatment decisions.','how accurate':'The model achieves ~80%+ AUC accuracy. The 66% on Augmentin reflects a 3-feature baseline model — adding more clinical features improves this significantly. ResistAI is a decision-support tool, not a replacement for lab culture.','shap':'SHAP (SHapley Additive exPlanations) values show which clinical factors most influenced the prediction. Prior antibiotic exposure, species type, and ward location are typically the top drivers.','compare':'The Compare tab lets you run two isolate predictions side-by-side and see a diff table showing which antibiotics changed and by how much. Useful for tracking resistance evolution.','timeline':'The Timeline tab tracks resistance changes across multiple visits for a specific patient. Enter a Patient ID when running predictions — they automatically appear in the timeline.','pdf':'After a prediction, click the "Export PDF" button to download a complete clinical summary including patient data, resistance chart, AI explanation, and the clinical disclaimer.','feedback':'After running a prediction, go to the Lab Feedback tab and submit the actual lab culture result. This creates a learning feedback loop and helps track model accuracy over time.','species':'Supported species: E. coli, S. aureus, K. pneumoniae, P. aeruginosa, A. baumannii, E. faecalis — the most common hospital-acquired infection pathogens.','cost':'Each antibiotic is labeled with a cost indicator: ₹ Low cost (Ampicillin, Gentamicin), ₹₹ Medium (Ciprofloxacin, Ceftriaxone), ₹₹₹ High (Meropenem, Vancomycin). The recommendation prioritizes the most effective AND affordable option.'};
+  const kb={
+    'why is amr dangerous':'AMR is dangerous because bacteria can survive antibiotics, making infections harder to treat. This can lead to longer illness, more complications, higher treatment costs, and increased risk of death.',
+    'what is amr':'AMR stands for antimicrobial resistance. It happens when bacteria evolve to resist the drugs designed to kill them, making common infections much harder to treat.',
+    'antibiotic resistance':'Antibiotic resistance (AMR) occurs when bacteria evolve to defeat the drugs designed to kill them. This happens through genetic mutations, often accelerated by antibiotic misuse. AMR kills 700,000 people/year and could reach 10 million by 2050. ResistAI helps predict which antibiotics will still work.',
+    'how does resistai work':'ResistAI is an AI-based decision support tool that uses clinical and isolate details to estimate resistance probabilities for multiple antibiotics. It ranks options from most likely effective to most likely resistant and provides an explanation of the main factors behind the result.',
+    'how do i use':'To use ResistAI:\n1. Select bacterial species\n2. Enter ward, infection source, stay duration\n3. Add clinical risk factors (device, prior hosp.)\n4. Select prior antibiotics used\n5. Click "Predict resistance"\nYou get a ranked antibiotic list with cost context, AI explanation, and PDF export.',
+    'what data is required for prediction':'For prediction, ResistAI mainly needs the bacterial species, plus optional clinical details such as ward, infection source, hospital stay, device usage, prior hospitalization, prior antibiotic exposure, and target antibiotic. Patient ID is optional for timeline tracking.',
+    'what data is required':'For prediction, ResistAI mainly needs the bacterial species, plus optional clinical details such as ward, infection source, hospital stay, device usage, prior hospitalization, prior antibiotic exposure, and target antibiotic. Patient ID is optional for timeline tracking.',
+    'results mean':'Results show resistance probability:\n🟢 <40% → Likely effective\n🟡 40–65% → Uncertain (lab confirmation needed)\n🔴 >65% → Likely resistant\n\nThe AI Explanation tab gives a plain-English summary. Cost context (₹/₹₹/₹₹₹) helps with treatment decisions.',
+    'how accurate':'The model achieves ~80%+ AUC accuracy. The 66% on Augmentin reflects a 3-feature baseline model — adding more clinical features improves this significantly. ResistAI is a decision-support tool, not a replacement for lab culture.',
+    'shap':'SHAP (SHapley Additive exPlanations) values show which clinical factors most influenced the prediction. Prior antibiotic exposure, species type, and ward location are typically the top drivers.',
+    'compare':'The Compare tab lets you run two isolate predictions side-by-side and see a diff table showing which antibiotics changed and by how much. Useful for tracking resistance evolution.',
+    'timeline':'The Timeline tab tracks resistance changes across multiple visits for a specific patient. Enter a Patient ID when running predictions — they automatically appear in the timeline.',
+    'pdf':'After a prediction, click the "Export PDF" button to download a complete clinical summary including patient data, resistance chart, AI explanation, and the clinical disclaimer.',
+    'feedback':'After running a prediction, go to the Lab Feedback tab and submit the actual lab culture result. This creates a learning feedback loop and helps track model accuracy over time.',
+    'species':'Supported species: E. coli, S. aureus, K. pneumoniae, P. aeruginosa, A. baumannii, E. faecalis — the most common hospital-acquired infection pathogens.',
+    'cost':'Each antibiotic is labeled with a cost indicator: ₹ Low cost (Ampicillin, Gentamicin), ₹₹ Medium (Ciprofloxacin, Ceftriaxone), ₹₹₹ High (Meropenem, Vancomycin). The recommendation prioritizes the most effective AND affordable option.'
+  };
   let response='I can help with questions about ResistAI! Try asking:\n• What is antibiotic resistance?\n• How do I use the predictor?\n• What do the results mean?\n• How does SHAP work?\n• How does the Timeline work?';
   for(const[key,val]of Object.entries(kb)){if(lower.includes(key)){response=val;break;}}
   messages.innerHTML+=`<div class="chatbot-message bot" id="typing-ind"><div class="message-avatar">🤖</div><div class="message-content"><div class="message-text" style="color:var(--text3)">Thinking...</div></div></div>`;
@@ -470,6 +515,7 @@ function sendChatMessage(){
   setTimeout(()=>{
     const ind=document.getElementById('typing-ind');if(ind)ind.remove();
     messages.innerHTML+=`<div class="chatbot-message bot"><div class="message-avatar">🤖</div><div class="message-content"><div class="message-text">${response}</div><div class="message-time">just now</div></div></div>`;
+    if(suggestions)suggestions.style.display='flex';
     messages.scrollTop=messages.scrollHeight;
   },700);
 }
@@ -478,6 +524,7 @@ function sendChatMessage(){
 document.addEventListener('DOMContentLoaded',()=>{
   buildPills();
   updateDashboard();
+  renderChatSuggestions();
   document.getElementById('chatbot-window').style.display='none';
   setTimeout(()=>{document.querySelectorAll('#pg-landing .fade-in').forEach(el=>el.classList.add('visible'));},150);
   document.addEventListener('click',e=>{
