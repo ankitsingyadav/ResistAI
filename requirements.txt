@@ -1,7 +1,8 @@
-fastapi
-uvicorn
-scikit-learn
-pandas
-numpy
-flask
+Flask==3.1.2
+flask-cors==6.0.2
+joblib==1.5.3
+numpy==2.4.2
+pandas==3.0.1
+scikit-image==0.26.0
+scikit-learn==1.8.0
 flask-cors
