@@ -288,7 +288,7 @@ function exportPDF(recordId){
   doc.text('Patient & Isolate Information',14,y);y+=8;
   doc.setDrawColor(0,212,255);doc.line(14,y,196,y);y+=6;
   doc.setFont('helvetica','normal');doc.setFontSize(10);
-  const info=[['Record ID',record.id||recordId],['Species',record.species||'N/A'],['Ward',record.ward||'N/A'],['Infection source',record.source||'N/A'],['Hospital stay',record.stay||'N/A'],['Model confidence',`${record.conf||'—'}%`],['Prediction time',`${record.predTime?.toFixed(2)||'—'}s`]];
+  const info=[['Record ID',record.id||recordId],['Patient ID',record.patientId||'N/A'],['Species',record.species||'N/A'],['Ward',record.ward||'N/A'],['Infection source',record.source||'N/A'],['Hospital stay',record.stay||'N/A'],['Model confidence',`${record.conf||'—'}%`],['Prediction time',`${record.predTime?.toFixed(2)||'—'}s`]];
   info.forEach(([k,v])=>{doc.setFont('helvetica','bold');doc.text(k+':',14,y);doc.setFont('helvetica','normal');doc.text(v,70,y);y+=6;});
   y+=4;doc.setFontSize(12);doc.setFont('helvetica','bold');doc.text('Resistance Predictions',14,y);y+=8;
   doc.setDrawColor(0,212,255);doc.line(14,y,196,y);y+=6;
